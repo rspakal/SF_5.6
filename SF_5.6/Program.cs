@@ -2,7 +2,7 @@
 using System.Linq;
 
 
-namespace SF_5._6
+namespace SF_56
 {
     internal class Program
     {
@@ -15,11 +15,16 @@ namespace SF_5._6
             User.lastName = Console.ReadLine();
             User.age = SetIntFromConsole("Enter UR age");
             Console.WriteLine("Do U have a pet?");
-            User.isHasPet = (Console.ReadLine()).ToLower() == "yes" ? true : false;
+            User.isHasPet = Console.ReadLine().ToLower() == "yes" ? true : false;
             if (User.isHasPet)
             {
                 User.petsAmount = SetIntFromConsole("How many pets do U have?");
-                User.petNames = FillArray("Enter the name of UR pet number ", User.petsAmount);
+                User.petNames = new string[User.petsAmount];
+                for (int i = 0; i < User.petNames.Length; i++)
+                {
+                    Console.WriteLine("Enter the name of UR pet number " + (i + 1));
+                    User.petNames[i] = Console.ReadLine();
+                }
             }
             else 
             {
@@ -27,40 +32,27 @@ namespace SF_5._6
                 User.petNames = new string[0];
             }
             User.favColorsAmount = SetIntFromConsole("How many colors do U like?");
-            User.favColorNames = FillArray ("Enter the name of UR favorite colors number ", User.favColorsAmount);
+            User.favColorNames = new string[User.favColorsAmount];
+            for (int i = 0; i < User.favColorNames.Length; i++)
+            {
+                Console.WriteLine("Enter the name of UR favorit color number " + (i + 1));
+                User.favColorNames[i] = Console.ReadLine();
+            }
             ShowData((User.firstName,User.lastName,User.age,User.isHasPet,User.petsAmount, User.petNames, User.favColorsAmount,User.favColorNames));
             Console.ReadKey();
         }
         static int SetIntFromConsole(string stringToConsole) 
         {
-            const string allNumbers = "0123456789";
-            string tempString ="";
             while (true)
             {
                 Console.WriteLine(stringToConsole);
-                tempString = Console.ReadLine();
-                tempString.TrimEnd();
-                if (tempString.Length < 4)
+                string tempString = Console.ReadLine().Trim();
+                if (int.TryParse(tempString,out int intValue) & intValue > 0)
                 {
-                    for (int i = 0; i < tempString.Length; i++)
-                    {
-                        if (!allNumbers.Contains(tempString[i])) break;
-                        if(i == (tempString.Length - 1) & tempString != "0") return int.Parse(tempString);
-                    }
-                    Console.WriteLine("U enter the incorrect value");
+                    return intValue;
                 }
+                Console.WriteLine("U entered the incorrect value");
             }
-        }
-
-        static string[] FillArray(string stringToConsole, int arrayLength)
-        {
-            var items = new string[arrayLength];  
-            for (int i = 0; i < items.Length; i++)
-            {
-                Console.WriteLine(stringToConsole + (i+1));
-                items[i]=Console.ReadLine();
-            }
-            return items;
         }
 
         static void ShowData((string firstName, string lastName, int age, bool isHasPet, int petsAmount, string[] petNames, int favColorsAmount, string[] favColorNames) User)
